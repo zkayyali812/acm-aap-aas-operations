@@ -12,7 +12,7 @@ spec:
     directory:
       recurse: true
     repoURL: 'https://github.com/stolostron/acm-aap-aas-operations'
-    targetRevision: main
+    targetRevision: update-aap-acm-app
   syncPolicy:
     automated:
       selfHeal: true

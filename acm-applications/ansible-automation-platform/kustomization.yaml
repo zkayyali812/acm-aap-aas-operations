@@ -3,5 +3,3 @@ kind: Kustomization
 
 resources:
   - subscription.yaml
-  - automationcontroller.yaml
-  - automationhub.yaml
