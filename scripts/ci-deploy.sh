@@ -8,21 +8,21 @@ checkoutClusterClaim() {
     oc project managed-services
 
     _TEMPLATE="apiVersion: hive.openshift.io/v1
-    kind: ClusterClaim
-    metadata:
-    annotations:
-        cluster.open-cluster-management.io/createmanagedcluster: 'false'
-    name: acm-aap-aas-ops-ci-cluster
-    spec:
-    clusterPoolName: hypershift-cluster-pool
-    lifetime: 2h
-    subjects:
-    - apiGroup: rbac.authorization.k8s.io
-        kind: Group
-        name: idp-for-the-masses
-    - apiGroup: rbac.authorization.k8s.io
-        kind: Group
-        name: system:serviceaccounts:managed-services"
+kind: ClusterClaim
+metadata:
+  annotations:
+    cluster.open-cluster-management.io/createmanagedcluster: 'false'
+  name: acm-aap-aas-ops-ci-cluster
+spec:
+  clusterPoolName: hypershift-cluster-pool
+  lifetime: 2h
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: idp-for-the-masses
+  - apiGroup: rbac.authorization.k8s.io
+    kind: Group
+    name: system:serviceaccounts:managed-services"
 
     echo "$_TEMPLATE" | oc apply -f -
 
@@ -48,6 +48,13 @@ checkoutClusterClaim() {
 
 echo "= CI Deployment Script ="
 _cloud_provider=$1
+
+if ! command -v yq &> /dev/null
+then
+    echo "Installing yq ..."
+    wget https://github.com/mikefarah/yq/releases/download/v4.9.3/yq_linux_amd64.tar.gz -O - |\
+    tar xz && sudo mv yq_linux_amd64 /usr/bin/yq >/dev/null
+fi
 
 echo "==> Deploying ACM-AAP-AAS-Operations to ${_cloud_provider}..."
 
