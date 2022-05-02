@@ -9,10 +9,10 @@ on:
       - main
 
   # manual trigger
-  workflow_dispatch:
+  # workflow_dispatch:
 
 jobs:
-  function-test:
+  pr-check-deploy-acm-aap-aas-ops-dev:
     if: contains(github.event.pull_request.labels.*.name, 'ok-to-test')
     runs-on: ubuntu-latest
     steps:
@@ -35,4 +35,5 @@ jobs:
           echo "= Checking out cluster ="
           bash ./scripts/ci-deploy.sh aws
         env:
-          COLLECTIVE_TOKEN: ${{ secrets.COLLECTIVE_TOKEN }}
+          _AWS_CLUSTERPOOL_API_URL: ${{ secrets._AWS_CLUSTERPOOL_API_URL }}
+          _AWS_CLUSTERPOOL_TOKEN: ${{ secrets._AWS_CLUSTERPOOL_TOKEN }}
