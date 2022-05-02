@@ -49,6 +49,13 @@ checkoutClusterClaim() {
 echo "= CI Deployment Script ="
 _cloud_provider=$1
 
+if ! command -v yq &> /dev/null
+then
+    echo "Installing yq ..."
+    wget https://github.com/mikefarah/yq/releases/download/v4.9.3/yq_linux_amd64.tar.gz -O - |\
+    tar xz && sudo mv yq_linux_amd64 /usr/bin/yq >/dev/null
+fi
+
 echo "==> Deploying ACM-AAP-AAS-Operations to ${_cloud_provider}..."
 
 # Check if cloud provider is valid. Perhaps support AKS next.
