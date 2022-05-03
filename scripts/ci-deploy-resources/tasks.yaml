@@ -132,10 +132,16 @@ spec:
       #!/bin/bash
       set -e
 
+      _VAULT_ADDRESS=$(oc get secret acm-aap-aas-ops-ci-secret -o jsonpath='{.data.vaultAddress}' | base64 -d )
+      _VAULT_TOKEN=$(oc get secret acm-aap-aas-ops-ci-secret -o jsonpath='{.data.vaultToken}' | base64 -d )
+
       _LOGIN_CMD=$(cat login.sh)
       eval "$_LOGIN_CMD"
 
       cd samples/
+
+      _VAULT_ADDR=${_VAULT_ADDRESS} yq eval -i '.spec.repo.env |= map(select(.name == "VAULT_ADDR").value = env(_VAULT_ADDR))' cluster-bootstrap/openshift-gitops/config/argocd.yaml
+      _VAULT_TOKEN=${_VAULT_TOKEN} yq eval -i '.spec.repo.env |= map(select(.name == "VAULT_TOKEN").value = env(_VAULT_TOKEN))' cluster-bootstrap/openshift-gitops/config/argocd.yaml
 
       make deploy-dev
     command:

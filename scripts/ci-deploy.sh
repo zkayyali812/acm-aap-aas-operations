@@ -33,10 +33,13 @@ if [[ "$_cloud_provider" == "aws" ]]; then
     _PIPELINERUN_NAME=${_PIPELINERUN_NAME} yq eval -i '.metadata.name = env(_PIPELINERUN_NAME)' scripts/ci-deploy-resources/pipelinerun.yaml
     _GITREPO=https://github.com/${_GITREPO}.git yq eval -i '.spec.params |= map(select(.name == "gitRepo").value = env(_GITREPO))' scripts/ci-deploy-resources/pipelinerun.yaml
     _GITBRANCH=${_GITBRANCH} yq eval -i '.spec.params |= map(select(.name == "gitBranch").value = env(_GITBRANCH))' scripts/ci-deploy-resources/pipelinerun.yaml  
-
+    echo ""
     echo "Creating the following PipelineRun -"
+    echo ""
     cat scripts/ci-deploy-resources/pipelinerun.yaml  
     cat scripts/ci-deploy-resources/pipelinerun.yaml  | oc apply -f -
+    echo ""
+    echo "View Pipeline run here - ${_AWS_CLUSTERPOOL_CONSOLE_URL}/k8s/ns/managed-services/tekton.dev~v1beta1~PipelineRun/${_PIPELINERUN_NAME}"
 
     _ATTEMPTS=0
     until oc get pipelinerun ${_PIPELINERUN_NAME} -n managed-services -ojsonpath='{.status.conditions[].reason}' | grep "Succeeded";
@@ -49,6 +52,7 @@ if [[ "$_cloud_provider" == "aws" ]]; then
             exit 1
         fi
     done
+
 else
   echo "Invalid cloud provider. Exiting."
   exit 1
