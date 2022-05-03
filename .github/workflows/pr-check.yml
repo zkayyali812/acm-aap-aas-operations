@@ -16,12 +16,6 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'ok-to-test')
     runs-on: ubuntu-latest
     steps:
-      - name: Declare variables
-        shell: bash
-        run: |
-          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
-          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
-        id: vars
       - uses: actions/checkout@v2
       - name: Removing 'ok-to-test' label
         uses: buildsville/add-remove-label@v1
@@ -34,9 +28,7 @@ jobs:
           echo "=== Deploying ACM-AAP-AAS-Operations ==="
 
           echo "= Checking out cluster ="
-          _BRANCH=${{ steps.vars.outputs.branch }}
-          _COMMIT=${{ steps.vars.outputs.sha_short }}
-          bash ./scripts/ci-deploy.sh aws ${GITHUB_REPOSITORY} ${{ github.head_ref }}.${{ github.sha }}
+          bash ./scripts/ci-deploy.sh aws ${GITHUB_REPOSITORY} ${{ github.head_ref }} ${{ github.sha }}
         env:
           _AWS_CLUSTERPOOL_API_URL: ${{ secrets._AWS_CLUSTERPOOL_API_URL }}
           _AWS_CLUSTERPOOL_TOKEN: ${{ secrets._AWS_CLUSTERPOOL_TOKEN }}
