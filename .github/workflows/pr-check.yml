@@ -16,9 +16,11 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'ok-to-test')
     runs-on: ubuntu-latest
     steps:
-      - name: Extract branch name
+      - name: Declare variables
         shell: bash
-        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        run: |
+          echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+          echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
         id: extract_branch
       - uses: actions/checkout@v2
       - name: Removing 'ok-to-test' label
@@ -32,8 +34,9 @@ jobs:
           echo "=== Deploying ACM-AAP-AAS-Operations ==="
 
           echo "= Checking out cluster ="
-          _BRANCH=${{ steps.extract_branch.outputs.branch }}
-          bash ./scripts/ci-deploy.sh aws ${GITHUB_REPOSITORY} ${_BRANCH}
+          _BRANCH=${{ steps.vars.outputs.branch }}
+          _COMMIT=${{ steps.vars.outputs.sha_short }}
+          bash ./scripts/ci-deploy.sh aws ${GITHUB_REPOSITORY} ${_BRANCH} ${_COMMIT}
         env:
           _AWS_CLUSTERPOOL_API_URL: ${{ secrets._AWS_CLUSTERPOOL_API_URL }}
           _AWS_CLUSTERPOOL_TOKEN: ${{ secrets._AWS_CLUSTERPOOL_TOKEN }}
