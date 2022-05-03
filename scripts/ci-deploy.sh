@@ -7,20 +7,10 @@ _GITBRANCH=$3
 _GITCOMMIT=$4
 _GITCOMMIT_SHORT=${_GITCOMMIT:0:5}
 
-# if ! command -v yq &> /dev/null
-# then
-#     echo "Installing yq ..."
-#     wget https://github.com/mikefarah/yq/releases/download/v4.9.3/yq_linux_amd64.tar.gz -O - |\
-#     tar xz && sudo mv yq_linux_amd64 /usr/bin/yq >/dev/null
-# fi
-
 mkdir -p samples/
 cd samples/
 git clone --single-branch --branch "${_GITBRANCH}"  https://github.com/${_GITREPO}.git
 cd acm-aap-aas-operations/
-
-_VAULT_ADDR=${VAULT_ADDRESS} yq eval -i '.spec.repo.env |= map(select(.name == "VAULT_ADDR").value = env(_VAULT_ADDR))' cluster-bootstrap/openshift-gitops/config/argocd.yaml
-_VAULT_TOKEN=${VAULT_TOKEN} yq eval -i '.spec.repo.env |= map(select(.name == "VAULT_TOKEN").value = env(_VAULT_TOKEN))' cluster-bootstrap/openshift-gitops/config/argocd.yaml
 
 echo "== Deploying ACM-AAP-AAS-Operations to ${_cloud_provider}..."
 
