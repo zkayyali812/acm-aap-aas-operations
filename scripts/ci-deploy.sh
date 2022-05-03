@@ -19,6 +19,9 @@ cd samples/
 git clone --single-branch --branch "${_GITBRANCH}"  https://github.com/${_GITREPO}.git
 cd acm-aap-aas-operations/
 
+_VAULT_ADDR=${VAULT_ADDRESS} yq eval -i '.spec.repo.env |= map(select(.name == "VAULT_ADDR").value = env(_VAULT_ADDR))' cluster-bootstrap/openshift-gitops/config/argocd.yaml
+_VAULT_TOKEN=${VAULT_TOKEN} yq eval -i '.spec.repo.env |= map(select(.name == "VAULT_TOKEN").value = env(_VAULT_TOKEN))' cluster-bootstrap/openshift-gitops/config/argocd.yaml
+
 echo "== Deploying ACM-AAP-AAS-Operations to ${_cloud_provider}..."
 
 # Check if cloud provider is valid. Perhaps support AKS next.
