@@ -18,6 +18,7 @@ _GITCOMMIT_SHORT=${_GITCOMMIT:0:5}
 mkdir -p samples/
 cd samples/
 git clone --single-branch --branch "${_GITBRANCH}"  https://github.com/${_GITREPO}.git
+cd acm-aap-aas-operations/
 
 echo "== Deploying ACM-AAP-AAS-Operations to ${_cloud_provider}..."
 
