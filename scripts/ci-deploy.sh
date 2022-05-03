@@ -5,11 +5,13 @@ echo "= CI Deployment Script ="
 _cloud_provider=$1
 _GITREPO=$2
 _GITBRANCH=$3
+_GITCOMMIT=$4
 
 
 echo "$_cloud_provider"
 echo "$_GITREPO\n"
 echo "$_GITBRANCH\n"
+echo "$_GITCOMMIT\n"
 
 # if ! command -v yq &> /dev/null
 # then
