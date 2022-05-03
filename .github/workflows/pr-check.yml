@@ -36,7 +36,7 @@ jobs:
           echo "= Checking out cluster ="
           _BRANCH=${{ steps.vars.outputs.branch }}
           _COMMIT=${{ steps.vars.outputs.sha_short }}
-          bash ./scripts/ci-deploy.sh aws ${GITHUB_REPOSITORY} ${_BRANCH} ${_COMMIT}
+          bash ./scripts/ci-deploy.sh aws ${GITHUB_REPOSITORY} ${{ github.head_ref }}.${{ github.sha }}
         env:
           _AWS_CLUSTERPOOL_API_URL: ${{ secrets._AWS_CLUSTERPOOL_API_URL }}
           _AWS_CLUSTERPOOL_TOKEN: ${{ secrets._AWS_CLUSTERPOOL_TOKEN }}
