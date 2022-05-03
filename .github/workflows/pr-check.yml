@@ -32,5 +32,4 @@ jobs:
         env:
           _AWS_CLUSTERPOOL_API_URL: ${{ secrets._AWS_CLUSTERPOOL_API_URL }}
           _AWS_CLUSTERPOOL_TOKEN: ${{ secrets._AWS_CLUSTERPOOL_TOKEN }}
-          VAULT_ADDRESS: ${{ secrets.VAULT_ADDRESS }}
-          VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+          _AWS_CLUSTERPOOL_CONSOLE_URL: ${{ secrets._AWS_CLUSTERPOOL_CONSOLE_URL }}
