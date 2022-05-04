@@ -23,9 +23,12 @@ if [[ "$_cloud_provider" == "aws" ]]; then
     _PIPELINERUN_NAME=${_PIPELINERUN_NAME} yq eval -i '.metadata.name = env(_PIPELINERUN_NAME)' scripts/ci-deploy-resources/pipelinerun.yaml
     _GITREPO=https://github.com/${_GITREPO}.git yq eval -i '.spec.params |= map(select(.name == "gitRepo").value = env(_GITREPO))' scripts/ci-deploy-resources/pipelinerun.yaml
     _GITBRANCH=${_GITBRANCH} yq eval -i '.spec.params |= map(select(.name == "gitBranch").value = env(_GITBRANCH))' scripts/ci-deploy-resources/pipelinerun.yaml  
+    
+    oc delete pipelinerun ${_PIPELINERUN_NAME} || true
     echo ""
     echo "Creating the following PipelineRun -"
     echo ""
+    
     cat scripts/ci-deploy-resources/pipelinerun.yaml  
     cat scripts/ci-deploy-resources/pipelinerun.yaml  | oc apply -f -
     echo ""
