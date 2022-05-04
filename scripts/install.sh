@@ -27,8 +27,10 @@ printf "admin\n"
 oc extract secret/openshift-gitops-cluster -n openshift-gitops --to=-
 sleep 10
 
+echo "TESTING"
+
 while [[ $(kubectl get pods -n openshift-gitops --no-headers --ignore-not-found | awk '/openshift-gitops-repo-server/' | wc -l) -ne 1 ]]; 
-    do echo "Waiting for openshift-gitops-repo-server with vault plugin start up and running" && sleep 30;
+    do echo "test Waiting for openshift-gitops-repo-server with vault plugin start up and running" && sleep 30;
 done
 
 printf "=====================Create ACM Argocd application ...\n"
